@@ -3,6 +3,7 @@ package com.example.myapplication57;
 import static androidx.fragment.app.FragmentManager.TAG;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,9 +128,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         OkHttpClient client = new OkHttpClient();
 
-        String urlX = "http://api.nbp.pl/api/exchangerates/rates/a/"+code.getText().toString()+"/";
+        String urlX = "http://api.nbp.pl/api/exchangerates/tables/a/2023-03-14";
 
         Request request = new Request.Builder()
                 .url(urlX)
@@ -141,18 +147,37 @@ public class MainActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     String NBP_Response = response.body().string();
 
-                    Gson gson = new Gson();
-                    Root root = gson.fromJson(NBP_Response, Root.class);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode rootNode = objectMapper.readTree(NBP_Response);
 
-                    double mid = root.rates.get(0).mid;
-                    String midStr = code.getText().toString() +": " +mid;
+                    JsonNode ratesNode = rootNode.get(0).get("rates");
+                    if (ratesNode.isArray()) {
+                        for (JsonNode rateNode : ratesNode) {
+                            String currency = rateNode.get("currency").asText();
+                            String code = rateNode.get("code").asText();
+                            double mid = rateNode.get("mid").asDouble();
+                            String date = rootNode.get(0).get("effectiveDate").asText();
+                            String Strmid = "" +mid;
 
-                    MainActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            textView.setText(midStr);
+                            // Dodaj kod do zapisu danych do bazy danych lub innej operacji
+
+                            // Przykład wypisania danych
+                            System.out.println("Currency: " + currency);
+                            System.out.println("Code: " + code);
+                            System.out.println("Mid: " + mid);
+                            System.out.println("Date: " + date);
+
+                            MainActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    DataBaseHelper CurrDb = new DataBaseHelper(MainActivity.this);
+                                    CurrDb.addCurrency(code.trim(), Double.valueOf(Strmid.trim()), date.trim());
+                                }
+                            });
+
+
                         }
-                    });
+                    }
                 }
             }
         });
