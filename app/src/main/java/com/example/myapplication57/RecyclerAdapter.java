@@ -1,5 +1,8 @@
 package com.example.myapplication57;
 
+import androidx.appcompat.app.AppCompatActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+
+
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private static final String TAG = "RecyclerAdapter";
     List<String> moviesList;
+
+    public interface OnItemClickListener {
+        void onItemClick(String item);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
 
     public RecyclerAdapter(List<String> moviesList) {
         this.moviesList = moviesList;
@@ -36,6 +52,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.rowCountTextView.setText(String.valueOf(position));
         holder.textView.setText(moviesList.get(position));
+
+        holder.rowCountTextView.setText(String.valueOf(position));
+        holder.textView.setText(moviesList.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onItemClick(moviesList.get(position));
+                }
+            }
+        });
     }
 
     @Override
@@ -63,7 +91,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public void onClick(View view) {
             Toast.makeText(view.getContext(), moviesList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
 
-
+//            Intent intent = new Intent(this, MainActivity3.class);
+//            //intent.putExtra(DetailsActivity.SELECTED_DISH, selectedDish);
+//            startActivity(intent);
         }
     }
 }

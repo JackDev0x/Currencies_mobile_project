@@ -81,7 +81,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity implements RecyclerAdapter.OnItemClickListener{
+
+
+
+    @Override
+    public void onItemClick(String item) {
+        // Tutaj umieść kod obsługujący kliknięcie, np. uruchomienie nowej aktywności
+        Intent intent = new Intent(MainActivity2.this, MainActivity3.class);
+        intent.putExtra("selectedItem", item);
+        startActivity(intent);
+    }
 
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
@@ -92,6 +102,8 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+
 
 
         moviesList = new ArrayList<>();
@@ -169,6 +181,9 @@ public class MainActivity2 extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        recyclerAdapter = new RecyclerAdapter(moviesList);
+        recyclerAdapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(recyclerAdapter);
 
     }
 
