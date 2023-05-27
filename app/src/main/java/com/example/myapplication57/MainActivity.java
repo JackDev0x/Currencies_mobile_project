@@ -4,6 +4,7 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -119,19 +120,22 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-    public void onHelloBTNCLickeddd(View view) throws IOException {
+    public void ListaDzisiajButton(View view) throws IOException {
 
+        //RecyclerActivity recyclerActivity = new RecyclerActivity();
+        Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+        startActivity(intent);
+    }
 
-        //        // wyświetl pobrane dane w TextView
+    public void SciagnijPojedynczaWalute(View view) throws IOException {
         EditText code = findViewById(R.id.editTextCurrencyCode);
         TextView textView = findViewById(R.id.textViewOutput);
 
 
 
-
         OkHttpClient client = new OkHttpClient();
 
-        String urlX = "http://api.nbp.pl/api/exchangerates/tables/a/2023-03-14";
+        String urlX = "http://api.nbp.pl/api/exchangerates/rates/a/"+code.getText().toString()+"/";
 
         Request request = new Request.Builder()
                 .url(urlX)
@@ -147,40 +151,82 @@ public class MainActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     String NBP_Response = response.body().string();
 
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode rootNode = objectMapper.readTree(NBP_Response);
+                    Gson gson = new Gson();
+                    Root root = gson.fromJson(NBP_Response, Root.class);
 
-                    JsonNode ratesNode = rootNode.get(0).get("rates");
-                    if (ratesNode.isArray()) {
-                        for (JsonNode rateNode : ratesNode) {
-                            String currency = rateNode.get("currency").asText();
-                            String code = rateNode.get("code").asText();
-                            double mid = rateNode.get("mid").asDouble();
-                            String date = rootNode.get(0).get("effectiveDate").asText();
-                            String Strmid = "" +mid;
+                    double mid = root.rates.get(0).mid;
+                    String midStr = code.getText().toString() +": " +mid;
 
-                            // Dodaj kod do zapisu danych do bazy danych lub innej operacji
-
-                            // Przykład wypisania danych
-                            System.out.println("Currency: " + currency);
-                            System.out.println("Code: " + code);
-                            System.out.println("Mid: " + mid);
-                            System.out.println("Date: " + date);
-
-                            MainActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    DataBaseHelper CurrDb = new DataBaseHelper(MainActivity.this);
-                                    CurrDb.addCurrency(code.trim(), Double.valueOf(Strmid.trim()), date.trim());
-                                }
-                            });
-
-
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView.setText(midStr);
                         }
-                    }
+                    });
                 }
             }
         });
+    }
+
+        //        // wyświetl pobrane dane w TextView
+//        EditText code = findViewById(R.id.editTextCurrencyCode);
+//        TextView textView = findViewById(R.id.textViewOutput);
+//
+//
+//
+//
+//        OkHttpClient client = new OkHttpClient();
+//
+//        String urlX = "http://api.nbp.pl/api/exchangerates/tables/a/2023-03-14";
+//
+//        Request request = new Request.Builder()
+//                .url(urlX)
+//                .build();
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+//                if(response.isSuccessful()){
+//                    String NBP_Response = response.body().string();
+//
+//                    ObjectMapper objectMapper = new ObjectMapper();
+//                    JsonNode rootNode = objectMapper.readTree(NBP_Response);
+//
+//                    JsonNode ratesNode = rootNode.get(0).get("rates");
+//                    if (ratesNode.isArray()) {
+//                        for (JsonNode rateNode : ratesNode) {
+//                            String currency = rateNode.get("currency").asText();
+//                            String code = rateNode.get("code").asText();
+//                            double mid = rateNode.get("mid").asDouble();
+//                            String date = rootNode.get(0).get("effectiveDate").asText();
+//                            String Strmid = "" +mid;
+//
+//                            // Dodaj kod do zapisu danych do bazy danych lub innej operacji
+//
+//                            // Przykład wypisania danych
+//                            System.out.println("Currency: " + currency);
+//                            System.out.println("Code: " + code);
+//                            System.out.println("Mid: " + mid);
+//                            System.out.println("Date: " + date);
+//
+//                            MainActivity.this.runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    DataBaseHelper CurrDb = new DataBaseHelper(MainActivity.this);
+//                                    CurrDb.addCurrency(code.trim(), Double.valueOf(Strmid.trim()), date.trim());
+//                                }
+//                            });
+//
+//
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
 
 //        String result = "";
@@ -199,6 +245,6 @@ public class MainActivity extends AppCompatActivity {
 //        } catch (Exception e) {
 //            Log.e("Error", e.getMessage());
 //        }
-    }
+
 }
 
