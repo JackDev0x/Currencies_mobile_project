@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-
-
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private static final String TAG = "RecyclerAdapter";
@@ -33,7 +31,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
 
     public RecyclerAdapter(List<String> moviesList) {
         this.moviesList = moviesList;
@@ -50,9 +47,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.rowCountTextView.setText(String.valueOf(position));
-        holder.textView.setText(moviesList.get(position));
-
         holder.rowCountTextView.setText(String.valueOf(position));
         holder.textView.setText(moviesList.get(position));
 
@@ -84,30 +78,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             rowCountTextView = itemView.findViewById(R.id.rowCountTextView);
 
             itemView.setOnClickListener(this);
-
         }
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), moviesList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-
-//            Intent intent = new Intent(this, MainActivity3.class);
-//            //intent.putExtra(DetailsActivity.SELECTED_DISH, selectedDish);
-//            startActivity(intent);
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                String selectedItem = moviesList.get(position);
+                if (listener != null) {
+                    listener.onItemClick(selectedItem);
+                }
+            }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

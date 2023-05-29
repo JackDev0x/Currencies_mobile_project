@@ -128,6 +128,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void SciagnijPojedynczaWalute(View view) throws IOException {
+
+//        for(int j= 10; j<29; j++) {
+//            EditText code = findViewById(R.id.editTextCurrencyCode);
+//            TextView textView = findViewById(R.id.textViewOutput);
+//
+//            OkHttpClient client = new OkHttpClient();
+//
+//            String urlX = "http://api.nbp.pl/api/exchangerates/tables/a/2023-05-"+j;
+//
+//            Request request = new Request.Builder()
+//                    .url(urlX)
+//                    .build();
+//            client.newCall(request).enqueue(new Callback() {
+//                @Override
+//                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                @Override
+//                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+//                    if (response.isSuccessful()) {
+//                        String NBP_Response = response.body().string();
+//
+//                        ObjectMapper objectMapper = new ObjectMapper();
+//                        JsonNode rootNode = objectMapper.readTree(NBP_Response);
+//
+//                        JsonNode ratesNode = rootNode.get(0).get("rates");
+//                        if (ratesNode.isArray()) {
+//                            for (JsonNode rateNode : ratesNode) {
+//                                String currency = rateNode.get("currency").asText();
+//                                String code = rateNode.get("code").asText();
+//                                double mid = rateNode.get("mid").asDouble();
+//                                String date = rootNode.get(0).get("effectiveDate").asText();
+//                                String Strmid = "" + mid;
+//
+//                                // Dodaj kod do zapisu danych do bazy danych lub innej operacji
+//
+//                                // Przykład wypisania danych
+//                                System.out.println("Currency: " + currency);
+//                                System.out.println("Code: " + code);
+//                                System.out.println("Mid: " + mid);
+//                                System.out.println("Date: " + date);
+//
+//                                MainActivity.this.runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        DataBaseHelper CurrDb = new DataBaseHelper(MainActivity.this);
+//                                        CurrDb.addCurrency(code.trim(), Double.valueOf(Strmid.trim()), date.trim());
+//                                    }
+//                                });
+//
+//
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+//        }
         EditText code = findViewById(R.id.editTextCurrencyCode);
         TextView textView = findViewById(R.id.textViewOutput);
 
