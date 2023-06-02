@@ -69,7 +69,7 @@ private RecyclerView recy;
 
         OkHttpClient client = new OkHttpClient();
 
-        String urlX = "http://api.nbp.pl/api/exchangerates/tables/a/2023-05-25";
+        String urlX = "http://api.nbp.pl/api/exchangerates/tables/a/today";
 
         Request request = new Request.Builder()
                 .url(urlX)

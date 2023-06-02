@@ -56,6 +56,36 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+
+//    private MyService myService;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Intent serviceIntent = new Intent(this, MyService.class);
+        //startService(serviceIntent);
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+//    @Override
+//    public void onDataReceived(String currency, String code, double mid, String date) {
+//        MainActivity.this.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Wykonaj operacje na danych otrzymanych z serwisu
+//                // Możesz aktualizować widok lub wykonywać inne działania związane z interfejsem użytkownika
+//                DataBaseHelper CurrDb = new DataBaseHelper(MainActivity.this);
+//                CurrDb.addCurrency(code.trim(), mid, date.trim());
+//            }
+//        });
+//    }
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -96,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        Intent serviceIntent = new Intent(this, MyService.class);
-        startService(serviceIntent);
+//        Intent serviceIntent = new Intent(this, MyService.class);
+//        startService(serviceIntent);
     }
 
     @Override
@@ -128,6 +158,14 @@ public class MainActivity extends AppCompatActivity {
         //RecyclerActivity recyclerActivity = new RecyclerActivity();
         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
         startActivity(intent);
+    }
+
+    public void buttonDel(View view) {
+
+        String date = ((EditText) findViewById(R.id.editTextCurrencyDate)).getText().toString();
+
+        DataBaseHelper myDb = new DataBaseHelper(MainActivity.this);
+        myDb.deleteRows(date);
     }
 
     public void SciagnijPojedynczaWalute(View view) throws IOException {

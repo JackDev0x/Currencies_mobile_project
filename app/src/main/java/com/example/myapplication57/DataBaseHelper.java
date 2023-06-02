@@ -5,11 +5,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
+
+
+import androidx.core.app.NotificationCompat;
+import androidx.work.Constraints;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import androidx.annotation.Nullable;
 
-import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -43,6 +55,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+//    void addCurrency(String code, double mid, String date){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues cv = new ContentValues();
+//
+//        cv.put(COLUMN_code, code);
+//        cv.put(COLUMN_mid, mid);
+//        cv.put(COLUMN_date, date);
+//        long result = db.insert(TABLE_NAME, null, cv);
+//        if(result == -1){
+//            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+//        }else{
+//            Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
     void addCurrency(String code, double mid, String date){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -51,11 +78,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_mid, mid);
         cv.put(COLUMN_date, date);
         long result = db.insert(TABLE_NAME, null, cv);
-        if(result == -1){
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
-        }
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if(result == -1){
+                    Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(context, "Added successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     Cursor readData(String query){
@@ -66,4 +99,60 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+    void deleteRows(String date){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sqlQuery = "DELETE FROM " + TABLE_NAME + " WHERE Date = ?";
+        db.execSQL(sqlQuery, new String[]{date});
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        long result = db.delete(TABLE_NAME, "Date=?", new String[]{row_Date});
+//        if(result == -1){
+//            Toast.makeText(context,"Failed to delete", Toast.LENGTH_SHORT).show();
+//        }else{
+//            Toast.makeText(context,"Successfully deleted", Toast.LENGTH_SHORT).show();
+//
+//        }
+    }
+
+    void startPeriodicWork() {
+        Constraints constraints = new Constraints.Builder()
+                .build();
+
+        PeriodicWorkRequest periodicWorkRequest =
+                new PeriodicWorkRequest.Builder(CurrencyWorker.class, 5, TimeUnit.MINUTES)
+                        .setConstraints(constraints)
+                        .build();
+
+        WorkManager.getInstance(context).enqueue(periodicWorkRequest);
+//        WorkManager workManager = WorkManager.getInstance(context);
+//        workManager.enqueue(periodicWorkRequest);
+    }
+
+        private static final String CHANNEL_ID = "my_channel_id";
+        private static final String CHANNEL_NAME = "My Channel";
+        private static final String CHANNEL_DESCRIPTION = "Channel Description";
+
+        public static void showNotification(Context context, String title, String message) {
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(
+                        CHANNEL_ID,
+                        CHANNEL_NAME,
+                        NotificationManager.IMPORTANCE_DEFAULT
+                );
+                channel.setDescription(CHANNEL_DESCRIPTION);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setSmallIcon(R.drawable.ic_baseline_person_26yo_24)
+                    .setAutoCancel(true);
+
+            notificationManager.notify(/* unique notification id */ 1, builder.build());
+        }
 }

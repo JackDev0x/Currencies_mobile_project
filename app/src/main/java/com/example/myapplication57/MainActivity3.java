@@ -96,10 +96,10 @@ public class MainActivity3 extends AppCompatActivity {
                     code.add(cur.getString(1));
                     mid.add(cur.getString(2));
                     date.add(cur.getString(3));
-                }
-            }
+            }        }
 
-            itemss = new String[id.size()];
+
+        itemss = new String[id.size()];
             for (int i = 0; i < id.size(); i++) {
                 itemss[i] = date.get(i) + "                                       " + mid.get(i);
             }
