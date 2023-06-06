@@ -1,7 +1,5 @@
 package com.example.myapplication57;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 
@@ -24,7 +22,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 import android.content.Intent;
-import android.widget.AdapterView;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +51,7 @@ private RecyclerView recy;
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
 
-    List<String> moviesList;
+    List<String> List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +61,7 @@ private RecyclerView recy;
 
 
 
-        moviesList = new ArrayList<>();
+        List = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
 
         OkHttpClient client = new OkHttpClient();
@@ -109,8 +106,8 @@ private RecyclerView recy;
                             MainActivity2.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    synchronized (moviesList) {
-                                        moviesList.add(code + "                  " + mid);
+                                    synchronized (List) {
+                                        List.add(code + "                  " + mid);
 
                                     }
                                     synchronized (recyclerAdapter) {
@@ -128,7 +125,7 @@ private RecyclerView recy;
 
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerAdapter = new RecyclerAdapter(moviesList);
+        recyclerAdapter = new RecyclerAdapter(List);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(recyclerAdapter);
 
@@ -139,7 +136,7 @@ private RecyclerView recy;
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        recyclerAdapter = new RecyclerAdapter(moviesList);
+        recyclerAdapter = new RecyclerAdapter(List);
         recyclerAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(recyclerAdapter);
 
@@ -156,7 +153,7 @@ private RecyclerView recy;
 
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();
-            Collections.swap(moviesList, fromPosition, toPosition);
+            Collections.swap(List, fromPosition, toPosition);
             recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
             return false;
         }

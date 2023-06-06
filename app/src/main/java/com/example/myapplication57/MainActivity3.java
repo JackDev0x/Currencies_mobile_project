@@ -62,6 +62,8 @@ public class MainActivity3 extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> createDocumentLauncher;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +93,10 @@ public class MainActivity3 extends AppCompatActivity {
                 Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
             } else {
                 cur.moveToFirst();
+                id.add(cur.getString(0));
+                code.add(cur.getString(1));
+                mid.add(cur.getString(2));
+                date.add(cur.getString(3));
                 while (cur.moveToNext()) {
                     id.add(cur.getString(0));
                     code.add(cur.getString(1));
@@ -110,6 +116,7 @@ public class MainActivity3 extends AppCompatActivity {
             lstHistory = findViewById(R.id.lst_frag_history);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itemss);
             lstHistory.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
@@ -154,6 +161,62 @@ public class MainActivity3 extends AppCompatActivity {
                     }
                 });
     }
+
+//    @Override
+//    protected void onStart()
+//    {
+//        super.onStart();
+//
+//        Lista_scroll ls = (Lista_scroll) getSupportFragmentManager().findFragmentById(R.id.lst_frag_history);
+//        String selectedIt = (String) getIntent().getExtras().get(SELECTED_ITEM);
+//
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            String selectedItem = intent.getStringExtra("selectedItem");
+//
+//            DataBaseHelper hisDB;
+//            ArrayList<String> id, code, mid, date;
+//            hisDB = new DataBaseHelper(MainActivity3.this);
+//            id = new ArrayList<>();
+//            code = new ArrayList<>();
+//            mid = new ArrayList<>();
+//            date = new ArrayList<>();
+//
+//            Cursor cur = hisDB.readData("SELECT * FROM currencies_history WHERE Currency_code='" + selectedItem.substring(0, 3) + "' ORDER BY DATE DESC");
+//
+//            pdfName = selectedItem.substring(0, 3);
+//            if (cur.getCount() == 0) {
+//                Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+//            } else {
+//                cur.moveToFirst();
+//                id.add(cur.getString(0));
+//                code.add(cur.getString(1));
+//                mid.add(cur.getString(2));
+//                date.add(cur.getString(3));
+//                while (cur.moveToNext()) {
+//                    id.add(cur.getString(0));
+//                    code.add(cur.getString(1));
+//                    mid.add(cur.getString(2));
+//                    date.add(cur.getString(3));
+//                }
+//            }
+//
+//
+//            itemss = new String[id.size()];
+//            for (int i = 0; i < id.size(); i++) {
+//                itemss[i] = date.get(i) + "                                       " + mid.get(i);
+//            }
+//
+//            setSupportActionBar(binding.toolbar);
+//            getSupportActionBar().setTitle(code.get(0));
+//
+//            lstHistory = findViewById(R.id.lst_frag_history);
+//            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itemss);
+//            lstHistory.setAdapter(adapter);
+//            adapter.notifyDataSetChanged();
+//        }
+//
+//    }
 
 
     private PdfDocument createPdfDocument() {

@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity {
 //        MainActivity.this.runOnUiThread(new Runnable() {
 //            @Override
 //            public void run() {
-//                // Wykonaj operacje na danych otrzymanych z serwisu
-//                // Możesz aktualizować widok lub wykonywać inne działania związane z interfejsem użytkownika
+
 //                DataBaseHelper CurrDb = new DataBaseHelper(MainActivity.this);
 //                CurrDb.addCurrency(code.trim(), mid, date.trim());
 //            }
@@ -147,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
 //    @Override
 //    protected void onPostExecute(String result) {
-//        // wyświetl pobrane dane w TextView
 //        TextView textView = findViewById(R.id.text_gallery);
 //        textView.setText(result);
 //    }
@@ -155,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void ListaDzisiajButton(View view) throws IOException {
 
-        //RecyclerActivity recyclerActivity = new RecyclerActivity();
         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
         startActivity(intent);
     }
@@ -204,9 +201,7 @@ public class MainActivity extends AppCompatActivity {
 //                                String date = rootNode.get(0).get("effectiveDate").asText();
 //                                String Strmid = "" + mid;
 //
-//                                // Dodaj kod do zapisu danych do bazy danych lub innej operacji
-//
-//                                // Przykład wypisania danych
+
 //                                System.out.println("Currency: " + currency);
 //                                System.out.println("Code: " + code);
 //                                System.out.println("Mid: " + mid);
@@ -267,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-        //        // wyświetl pobrane dane w TextView
+
 //        EditText code = findViewById(R.id.editTextCurrencyCode);
 //        TextView textView = findViewById(R.id.textViewOutput);
 //

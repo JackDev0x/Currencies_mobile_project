@@ -105,14 +105,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sqlQuery = "DELETE FROM " + TABLE_NAME + " WHERE Date = ?";
         db.execSQL(sqlQuery, new String[]{date});
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        long result = db.delete(TABLE_NAME, "Date=?", new String[]{row_Date});
-//        if(result == -1){
-//            Toast.makeText(context,"Failed to delete", Toast.LENGTH_SHORT).show();
-//        }else{
-//            Toast.makeText(context,"Successfully deleted", Toast.LENGTH_SHORT).show();
-//
-//        }
     }
 
     void startPeriodicWork() {
